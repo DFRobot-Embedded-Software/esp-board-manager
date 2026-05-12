@@ -1,10 +1,9 @@
 version: 0.5.10
-description: Board manager for ESP-GMF
-url: https://github.com/espressif/esp-gmf/tree/main/packages/esp_board_manager
-documentation: https://github.com/espressif/esp-gmf/blob/main/packages/esp_board_manager/README.md
-issues: https://github.com/espressif/esp-gmf/issues
+description: Board manager for Espressif
+url: https://github.com/espressif/esp-board-manager
+documentation: https://github.com/espressif/esp-board-manager/blob/main/esp_board_manager/README.md
+issues: https://github.com/espressif/esp-board-manager/issues
 tags:
-- gmf
 - board_manager
 
 examples:

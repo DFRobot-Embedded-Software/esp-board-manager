@@ -1,0 +1,40 @@
+.build_template:
+  stage: build
+  image: "${IDF_IMAGE}"
+  interruptible: true
+  timeout: 2 hours
+  tags:
+    - build
+  dependencies: []
+  variables:
+    IDF_GIT_SAFE_DIR: "*"
+  before_script:
+    - source "${CI_PROJECT_DIR}/tools/ci/utils.sh"
+    - add_gitlab_ssh_keys
+    - install_bmgr_assist
+    - setup_ci_venv
+  cache:
+    key: "pip-${CI_PROJECT_NAME}-${IDF_IMAGE}"
+    paths:
+      - .cache/pip
+    policy: pull-push
+  artifacts:
+    when: always
+    expire_in: 4 days
+    paths:
+      - "**/build*/bootloader/*.map"
+      - "**/build*/bootloader/*.elf"
+      - "**/build*/*.map"
+      - "**/build*/*.elf"
+      - "**/build*/bootloader/*.bin"
+      - "**/build*/*.bin"
+      - "**/build*/partition_table/*.bin"
+      - "**/build*/flasher_args.json"
+      - "**/build*/flash_project_args"
+      - "**/build*/config/sdkconfig.json"
+      - "**/build*/sdkconfig"
+      - "**/build*/project_description.json"
+      - "**/build*/build.log"
+      - "app_info_*.txt"
+      - "build_summary_*.xml"
+      - "esp_board_manager/test_apps/logs/**"

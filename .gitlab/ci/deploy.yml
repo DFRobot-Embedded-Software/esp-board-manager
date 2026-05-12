@@ -1,0 +1,23 @@
+push_to_github:
+  stage: deploy
+  extends:
+    - .rules:deploy
+  when: on_success
+  image: ${CI_DOCKER_REGISTRY}/esp32-ci-env
+  interruptible: false
+  tags:
+    - build
+  dependencies: []
+  variables:
+    GIT_STRATEGY: clone
+    GIT_DEPTH: "0"
+  before_script:
+    - echo "skip default before_script"
+  script:
+    - source "${CI_PROJECT_DIR}/tools/ci/utils.sh"
+    - add_github_ssh_keys
+    - git fetch --unshallow || true
+    - git remote remove github 2>/dev/null || true
+    - git remote add github "${TARGET_GITHUB_REPO:?TARGET_GITHUB_REPO is not set}"
+    - git remote -v
+    - push_to_github

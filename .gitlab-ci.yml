@@ -1,0 +1,33 @@
+stages:
+  - pre_check
+  - build
+  - deploy
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS && $CI_PIPELINE_SOURCE == "push"'
+      when: never
+    - if: '$CI_COMMIT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+
+variables:
+  GIT_STRATEGY: clone
+  GET_SOURCES_ATTEMPTS: "10"
+  ARTIFACT_DOWNLOAD_ATTEMPTS: "10"
+  GIT_SUBMODULE_STRATEGY: none
+  GIT_DEPTH: "1"
+  IDF_GIT_SAFE_DIR: "*"
+  IDF_SKIP_CHECK_SUBMODULES: "1"
+  CI_VENV_PATH: "$CI_PROJECT_DIR/.ci_venv"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  IDF_CI_INSTALL_SPEC: "git+https://github.com/espressif/idf-ci.git@a7a34c7ad683"
+  ESP_BMGR_ASSIST_INSTALL_SPEC: "esp-bmgr-assist"
+
+include:
+  - ".gitlab/ci/rules.yml"
+  - ".gitlab/ci/common.yml"
+  - ".gitlab/ci/pre-check.yml"
+  - ".gitlab/ci/build-test-apps.yml"
+  - ".gitlab/ci/deploy.yml"
